@@ -6,9 +6,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var request = require('request');
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
 var app = express();
 
 // view engine setup
@@ -45,9 +45,29 @@ var corsOptions = {
   origin: 'http://localhost:3000'
 };
 
-app.get('/ubertest.html', cors(corsOptions),  function(req, res, next) {
-  // Handle the get for this route
+app.get('/uberprice', function (req, res) {  
+  var start_latitude = req.query.start_latitude;
+  var start_longitude = req.query.start_longitude;
+  var end_latitude = req.query.end_latitude;
+  var end_longitude = req.query.end_longitude;
+
+  //Calling Uber Webservice
+  var uberURL = 'http://api.uber.com/v1/estimates/price?async=false&start_latitude='+start_latitude+'&start_longitude='+start_longitude+'&end_latitude='+end_latitude+'&end_longitude='+end_longitude+'&server_token=rQNg72K512hx6HNGC6a6YR3b4ehRjgCrfjtA2XPx';
+  var avg_price = 0;
+  request(uberURL, function (error, response, body) {
+   if (!error && response.statusCode == 200) {
+      obj = JSON.parse(body);  
+      //console.log(obj.prices[0].low_estimate);
+      //console.log(uberURL);
+      avg_price = ( obj.prices[0].high_estimate + obj.prices[0].low_estimate)/2 ;
+      var results = JSON.stringify({ avg_price: avg_price });
+      res.send(results);  
+    }  
+   else{ res.send(JSON.stringify({ avg_price: 100000 }));}   
+  });
+  
 });
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

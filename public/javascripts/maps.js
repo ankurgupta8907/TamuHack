@@ -165,8 +165,7 @@ var uber_average = 0;
 
 function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, callback)
 {
-    var uberServerToken = "rQNg72K512hx6HNGC6a6YR3b4ehRjgCrfjtA2XPx";
-    var myURL = "https://api.uber.com/v1/estimates/price";
+    var myURL = "/uberprice";
 
     $.ajax({
         type: 'GET',
@@ -175,7 +174,6 @@ function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, 
 
         },
         data: {
-            server_token: uberServerToken,
             start_latitude : startLatitude ,
             start_longitude: startLongitude,
             end_latitude: endLatitude,
@@ -185,10 +183,7 @@ function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, 
         dataType: 'json',
         crossDomain: true,
         success: function( response , textStatus, xhr) {
-            console.log(response);
-            var average = (response.prices[0].low_estimate + response.prices[0].high_estimate)/2;
-//                    console.log(average);
-            callback(average);
+            callback(response.avg_price);
 
         },
         error: function (xhr, textStatus, errorThrown) {
@@ -198,6 +193,8 @@ function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, 
 }
 
 function calculateCost(response) {
+    
+    //Perform a error handling. In case the two distances are too far then routes is undefined
     steps = response.routes[0].legs[0].steps;
     // Instantiate an info window to hold step text.
     var stepDisplay = new google.maps.InfoWindow;
@@ -214,7 +211,7 @@ function calculateCost(response) {
                         step.end_location.J, step.end_location.M, function(average) {
                             uber_average = average;
                         });
-                console.log(uber_average);
+                //console.log(uber_average);
                 price += uber_average;
             }
         }
