@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">    
         <LINK href="/stylesheets/style.css" rel="stylesheet" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgRmvEDZPv0vPqsVv1FyKnjVc4cZ6xvAo&signed_in=true&libraries=places&callback=initMap"
@@ -20,12 +21,63 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-3">.col-sm-4 sfsfs</div>
+                <div class="col-sm-3 form-group">
+                <!-- Side Content-->
+                <span class="label label-primary"><font size="2">For Uber and public transport journey</font></span><br/>
+                Total Time : <label id="time-all">22</label> <br/>
+                Total Cost : <label id="cost-all">22</label> <br/><br/><br/>
+
+                <label class="label label-primary"><font size="2">For Uber only journey</font></label><br/>
+                Total Time : <label id="time-uber-only">22</label> <br/>
+                Total Cost : <label id="cost-uber-only">22</label> <br/><br/><br/>
+
+                <label class="label label-primary"><font size="2">For public transport and walk journey</font></label><br/>
+                Total Time : <label id="time-public-only">22</label> <br/>
+                Total Cost : <label id="cost-public-only">22</label> <br/><br/><br/>
+                
+                <label class="label label-primary"><font size="2">Journey Legs</font></label><br/>
+                <table class="table">
+                <thead>
+                  <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Mode</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size:10px">
+                
+                  <tr class="success"> 
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>Uber</td>
+                  </tr>
+                  <tr class="danger">
+                    <td>dfsfs</td>
+                    <td>Moe</td>
+                    <td>Bus</td>
+                  </tr>
+                  <tr class="info">
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>Walk</td>
+                  </tr>
+                   <tr class="warning">
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>Subway</td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+
+
+
+                </div>
                 <div id="map" class="col-sm-9"></div>
                 </div> <!-- div row ends-->
                 
                 <div class="row">
-                    <div class="col-sm-3">.col-sm-4</div>
+                    <div class="col-sm-3"></div>
                     <div class="col-sm-9">
                         <br/>
                         <b>Start: </b>

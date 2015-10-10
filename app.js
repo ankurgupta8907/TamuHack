@@ -57,11 +57,11 @@ app.get('/uberprice', function (req, res) {
   request(uberURL, function (error, response, body) {
    if (!error && response.statusCode == 200) {
       obj = JSON.parse(body);  
-      //console.log(obj.prices[0].low_estimate);
+      console.log(obj);
       //console.log(uberURL);
       avg_price = ( obj.prices[0].high_estimate + obj.prices[0].low_estimate)/2 ;
       var results = JSON.stringify({ avg_price: avg_price });
-      res.send(results);  
+      res.send(results);    
     }  
    else{ res.send(JSON.stringify({ avg_price: 100000 }));}   
   });
