@@ -203,6 +203,9 @@ function calculateCost(response) {
             console.log(uber_time);
         });
 
+    var total_time_U = uber_time;
+    var price_U = uber_average;
+
     console.log('Total time U ' + uber_time.toString());
     console.log( 'Price U ' + uber_average.toString());
 
@@ -249,12 +252,49 @@ function calculateCost(response) {
         //console.log(steps[i].travel_mode);
     }
     var total_time_M = total_time_P - uber_time_save;
-    console.log('Total time M ' + total_time_M);
+    console.log('Total time M ' + getTimeString(total_time_M));
     console.log('Price M ' + price_M.toString());
 
+    addElementTime('time-all', getTimeString(total_time_M));
+    addElementTime('time-uber-only', getTimeString(total_time_U));
+    addElementTime('time-public-only', getTimeString(total_time_P));
+
+    addElementMoney('cost-all', price_M);
+    addElementMoney('cost-uber-only', price_U);
+    addElementMoney('cost-public-only', price_P);
     return price_M;
 }
 
+
+function getTimeString(time) {
+    var mins = ~~(time / 60);
+    var secs = time % 60;
+
+// Hours, minutes and seconds
+    var hrs = ~~(time / 3600);
+    var mins = ~~((time % 3600) / 60);
+    var secs = time % 60;
+
+// Output like "1:01" or "4:03:59" or "123:03:59"
+    ret = "";
+
+    if (hrs > 0)
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+}
+
+function addElementMoney(id, value) {
+    var element = document.getElementById(id);
+    element.innerHTML = "$ " + value.toString();
+}
+
+function addElementTime(id, value) {
+    var element = document.getElementById(id);
+    element.innerHTML =  value.toString();
+}
 
 function showSteps(directionResult, stepDisplay) {
     // For each step, place a marker, and add the text to the marker's infowindow.
