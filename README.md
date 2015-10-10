@@ -1,2 +1,0 @@
-# TamuHack
-Repo for tamuhack.

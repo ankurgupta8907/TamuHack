@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <style>
+        #map {
+            width: 1260px;
+            height: 540px;
+        }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgRmvEDZPv0vPqsVv1FyKnjVc4cZ6xvAo&signed_in=true&libraries=places&callback=initMap" 
+            async defer></script>
+    <script type="text/javascript" src="javascripts/maps.js"></script>
+</head>
+
+<body>
+<div id="map"></div>
+<div>
+    <strong>Start: </strong>
+    <input id="start" class="controls" type="text" placeholder="Enter the start location" value="450 Oak Avenue, Menlo Park, CA, United States" size="50"/>
+    <strong>End: </strong>
+    <input id="end" class="controls" type="text" placeholder="Enter the end location" value="1 Howard Street, San Francisco, CA, United States" size="50"/>
+    <input id="calculate_directions" type="submit" value="Submit">
+    </select>
+</div>
+</body>
+</html>
+
