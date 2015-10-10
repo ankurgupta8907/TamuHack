@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">    
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <LINK href="/stylesheets/style.css" rel="stylesheet" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgRmvEDZPv0vPqsVv1FyKnjVc4cZ6xvAo&signed_in=true&libraries=places&callback=initMap"
@@ -14,60 +14,59 @@
         <div class="container">
             
             <div class="row">
-                <div class="col-sm-12 jumbotron">
-                <h1>Budget Ride Finder</h1>
-                <p>A travel route finder which plans your trip with public transport and uber to fit your budget and time.</p>
+                <div class="col-sm-12 jumbotron container-fluid">
+                    <h2>Budget Ride Finder</h2>
+                    <p>A travel route finder which plans your trip with public transport and uber to fit your budget and time.</p>
                 </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-3 form-group"> </div>
+            <div class="col-sm-9 form-group"> 
+             
+             <br/>
+                <b>Start: </b>
+                <input id="start" class="controls" type="text" placeholder="Enter the start location" size="50"/>
+                <b>End: </b>
+                <input id="end" class="controls" type="text" placeholder="Enter the end location" size="50"/>
+                <input id="calculate_directions" type="submit" value="Submit"> <br>
+                <h3 id="result" visibility="hidden"></h3>   
+
+            </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-3 form-group">
-                <!-- Side Content-->
-
-                <label class="label label-primary"><font size="2">For Uber only journey</font></label><br/>
-                Total Time : <label id="time-uber-only">0</label> <br/>
-                Total Cost : <label id="cost-uber-only">0</label> <br/><br/><br/>
-
-                <label class="label label-primary"><font size="2">For public transport and walk journey</font></label><br/>
-                Total Time : <label id="time-public-only">0</label> <br/>
-                Total Cost : <label id="cost-public-only">0</label> <br/><br/><br/>
-
+                    <!-- Side Content-->
+                    <label class="label label-primary"><font size="2">For Uber only journey</font></label><br/>
+                    Total Time : <label id="time-uber-only">0</label> <br/>
+                    Total Cost : <label id="cost-uber-only">0</label> <br/><br/><br/>
+                    <label class="label label-primary"><font size="2">For public transport and walk journey</font></label><br/>
+                    Total Time : <label id="time-public-only">0</label> <br/>
+                    Total Cost : <label id="cost-public-only">0</label> <br/><br/><br/>
                     <span class="label label-primary"><font size="2">For Uber and public transport journey</font></span><br/>
                     Total Time : <label id="time-all">0</label> <br/>
                     Total Cost : <label id="cost-all">0</label> <br/><br/><br/>
-
-
                     <label class="label label-primary"><font size="2">Journey Legs</font></label><br/>
-                <table id="instruction-table" class="table">
-                <thead>
-                  <tr>
-                    <th>Mode</th>
-                    <th>Instruction</th>
-                  </tr>
-                </thead>
-                <tbody style="font-size:10px">
-                
-
-                </tbody>
-              </table>
-
-
-
+                    <table id="instruction-table" class="table">
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Instruction</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size:10px">
+                            
+                        </tbody>
+                    </table>
                 </div>
                 <div id="map" class="col-sm-9"></div>
-                </div> <!-- div row ends-->
                 
-                <div class="row">
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-9">
-                        <br/>
-                        <b>Start: </b>
-                        <input id="start" class="controls" type="text" placeholder="Enter the start location" size="50"/>
-                        <b>End: </b>
-                        <input id="end" class="controls" type="text" placeholder="Enter the end location" size="50"/>
-                        <input id="calculate_directions" type="submit" value="Submit"> <br>
-                        <h3 id="result"></h3>
-                    </select>
+            </select>
+            </div> <!-- div row ends-->
+            
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-9">
                 </div>
                 </div> <!-- div row ends-->
                 

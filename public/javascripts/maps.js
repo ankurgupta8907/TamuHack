@@ -225,6 +225,8 @@ function calculateCost(response) {
     console.log('Total time P ' + total_time_P.toString());
     console.log( 'Price P ' + price_P.toString());
 
+    var table = document.getElementById("instruction-table");
+    $("#instruction-table").children().remove();     
     for (var i = 0; i < steps.length; i++) {
         var step = steps[i];
         var instructions = step.instructions;
@@ -235,7 +237,6 @@ function calculateCost(response) {
                     step.end_location.J, step.end_location.M, function (average, duration) {
                         uber_average = average;
                         uber_time = duration;
-                        //console.log(uber_time);
                     });
                 price_M += uber_average;
                 uber_time_save += step.duration.value - uber_time;
@@ -251,7 +252,6 @@ function calculateCost(response) {
 
         }
 
-        var table = document.getElementById("instruction-table");
         var row = table.insertRow(-1);
 
         var cell1 = row.insertCell(0);
@@ -354,7 +354,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         console.log(response);
         final_price = calculateCost(response);
         var element = document.getElementById("result");
-        element.innerHTML = "The cheapest and fastest route costs $ " + final_price.toString();
+        //element.innerHTML = "The cheapest and fastest route costs $ " + final_price.toString();
 
         if (status === google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);

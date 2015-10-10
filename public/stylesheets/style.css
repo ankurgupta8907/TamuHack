@@ -10,3 +10,5 @@ a {
 #map {
   height: 500px;
 }
+
+.jumbotron { max-height: 150px;}
