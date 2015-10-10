@@ -60,7 +60,7 @@ app.get('/uberprice', function (req, res) {
       console.log(obj);
       //console.log(uberURL);
       avg_price = ( obj.prices[0].high_estimate + obj.prices[0].low_estimate)/2 ;
-      var results = JSON.stringify({ avg_price: avg_price });
+      var results = JSON.stringify({ avg_price: avg_price, duration: obj.prices[0].duration });
       res.send(results);  
     }  
    else{ res.send(JSON.stringify({ avg_price: 100000 }));}   

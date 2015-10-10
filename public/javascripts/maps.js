@@ -161,7 +161,7 @@ function initMap() {
 }
 
 var uber_average = 0;
-
+var uber_time = 0;
 
 function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, callback)
 {
@@ -183,7 +183,7 @@ function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, 
         dataType: 'json',
         crossDomain: true,
         success: function( response , textStatus, xhr) {
-            callback(response.avg_price);
+            callback(response.avg_price, response.duration);
 
         },
         error: function (xhr, textStatus, errorThrown) {
@@ -193,33 +193,66 @@ function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, 
 }
 
 function calculateCost(response) {
-    
+    var start_location = response.routes[0].legs[0].start_location;
+    var end_location = response.routes[0].legs[0].end_location;
+
+    getUberEstimate(start_location.J, start_location.M,
+        end_location.J, end_location.M, function (average, duration) {
+            uber_average = average;
+            uber_time = duration;
+            console.log(uber_time);
+        });
+
+    console.log('Total time U ' + uber_time.toString());
+    console.log( 'Price U ' + uber_average.toString());
+
     //Perform a error handling. In case the two distances are too far then routes is undefined
     steps = response.routes[0].legs[0].steps;
     // Instantiate an info window to hold step text.
     var stepDisplay = new google.maps.InfoWindow;
     showSteps(response, stepDisplay);
 
-    console.log( 'Public transport cost ' + response.routes[0].fare.value.toString());
-    var price = response.routes[0].fare.value;
+
+    var price_P = response.routes[0].fare.value;
+    var price_M = response.routes[0].fare.value;
+    var uber_time_save = 0;
+
+
+    var total_time_P = response.routes[0].legs[0].duration.value;
+    console.log('Total time P ' + total_time_P.toString());
+    console.log( 'Price P ' + price_P.toString());
 
     for (var i = 0; i < steps.length; i++) {
         var step = steps[i];
         if (step.travel_mode == "WALKING") {
-            if (step.duration.value >= 300) {
+            if (step.duration.value >= 200) {
                 getUberEstimate(step.start_location.J, step.start_location.M,
-                        step.end_location.J, step.end_location.M, function(average) {
-                            uber_average = average;
-                        });
+                    step.end_location.J, step.end_location.M, function (average, duration) {
+                        uber_average = average;
+                        uber_time = duration;
+                        //console.log(uber_time);
+                    });
                 //console.log(uber_average);
-                price += uber_average;
+                price_M += uber_average;
+                //console.log('UBER ' + uber_time.toString());
+                //console.log(step.duration.value);
+                uber_time_save += step.duration.value - uber_time;
+                //console.log(uber_time_save);
+            }
+            else {
+                //console.log('PUBLIC ' + step.duration.value.toString());
             }
         }
-        console.log(steps[i].travel_mode);
+        else {
+            //console.log('PUBLIC ' + step.duration.value.toString());
+        }
+        //console.log(steps[i].travel_mode);
     }
-    console.log('Final price ' + price.toString());
+    var total_time_M = total_time_P - uber_time_save;
+    console.log('Total time M ' + total_time_M);
+    console.log('Price M ' + price_M.toString());
 
-    return price;
+    return price_M;
 }
 
 
