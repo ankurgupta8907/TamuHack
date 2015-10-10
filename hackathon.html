@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <style>
+        #map {
+            width: 1260px;
+            height: 540px;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgRmvEDZPv0vPqsVv1FyKnjVc4cZ6xvAo&signed_in=true&libraries=places&callback=initMap"
+            async defer></script>
+    <script type="text/javascript">
+        var infowindowStart;
+        var markerStart;
+        var autocompleteStart;
+
+        var infowindowEnd;
+        var markerEnd;
+        var autocompleteEnd;
+        var map;
+
+        function setBounds() {
+            var bounds = new google.maps.LatLngBounds();
+            if (markerStart.getPosition() !== undefined) {
+                bounds.extend(markerStart.getPosition());
+            }
+            if (markerEnd.getPosition() !== undefined) {
+                bounds.extend(markerEnd.getPosition());
+            }
+            map.fitBounds(bounds);
+        }
+
+        function autocompleteListnerStart() {
+            infowindowStart.close();
+            markerStart.setVisible(false);
+            place = autocompleteStart.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                // map.fitBounds(place.geometry.viewport);
+            } else {
+                // map.setCenter(place.geometry.location);
+                // map.setZoom(17);  // Why 17? Because it looks good.
+            }
+            markerStart.setIcon(/** @type {google.maps.Icon} */({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+            markerStart.setPosition(place.geometry.location);
+            markerStart.setVisible(true);
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+
+            setBounds();
+
+            infowindowStart.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindowStart.open(map, markerStart);
+        }
+
+
+        function autocompleteListnerEnd() {
+            infowindowEnd.close();
+            markerEnd.setVisible(false);
+            var place = autocompleteEnd.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                // map.fitBounds(place.geometry.viewport);
+            } else {
+                // map.setCenter(place.geometry.location);
+                // map.setZoom(17);  // Why 17? Because it looks good.
+            }
+            markerEnd.setIcon(/** @type {google.maps.Icon} */({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+            markerEnd.setPosition(place.geometry.location);
+            markerEnd.setVisible(true);
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+
+            setBounds();
+
+            infowindowEnd.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindowEnd.open(map, markerEnd);
+        }
+
+
+        function initMap() {
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = new google.maps.DirectionsRenderer;
+
+            // Get a map.
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 7,
+                center: {lat: 41.85, lng: -87.65},
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            directionsDisplay.setMap(map);
+
+            // On change handler for directions.
+            var onChangeHandler = function() {
+                calculateAndDisplayRoute(directionsService, directionsDisplay);
+            };
+            document.getElementById('calculate_directions').addEventListener('change', onChangeHandler);
+
+            // Place autocomplete.
+            var input = (document.getElementById('start'));
+            autocompleteStart = new google.maps.places.Autocomplete(input);
+            autocompleteStart.bindTo('bounds', map);
+
+            infowindowStart = new google.maps.InfoWindow();
+            markerStart = new google.maps.Marker({
+                map: map,
+                anchorPoint: new google.maps.Point(0, -29)
+            });
+
+            autocompleteStart.addListener('place_changed', autocompleteListnerStart);
+
+            var inputEnd = (document.getElementById('end'));
+            autocompleteEnd = new google.maps.places.Autocomplete(inputEnd);
+            autocompleteEnd.bindTo('bounds', map);
+
+            infowindowEnd = new google.maps.InfoWindow();
+            markerEnd = new google.maps.Marker({
+                map: map,
+                anchorPoint: new google.maps.Point(0, -29)
+            });
+
+            autocompleteEnd.addListener('place_changed', autocompleteListnerEnd);
+
+        }
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+            directionsService.route({
+                origin: document.getElementById('start').value,
+                destination: document.getElementById('end').value,
+                travelMode: google.maps.TravelMode.TRANSIT
+            }, function(response, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                } else {
+                    window.alert('Directions request failed due to ' + status);
+                }
+            });
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+<div id="map"></div>
+<div>
+    <strong>Start: </strong>
+    <input id="start" class="controls" type="text" placeholder="Enter the start location">
+    <strong>End: </strong>
+    <input id="end" class="controls" type="text" placeholder="Enter the end location">
+    <input id="calculate_directions" type="submit" value="Submit">
+    </select>
+</div>
+</body>
+</html>
+
