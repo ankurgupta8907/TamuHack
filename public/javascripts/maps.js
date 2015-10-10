@@ -7,11 +7,6 @@ var markerEnd;
 var autocompleteEnd;
 var map;
 
-var x = getEstimatesForUserLocation(30.2729219,-97.7436437,30.304877,-97.725002);
-console.log('start');
-console.log(x);
-console.log('end');
-
 function setBounds() {
     var bounds = new google.maps.LatLngBounds();
     if (markerStart.getPosition() !== undefined) {
@@ -22,7 +17,6 @@ function setBounds() {
     }
     map.fitBounds(bounds);
 }
-
 
 function autocompleteListnerStart() {
     infowindowStart.close();
@@ -40,12 +34,12 @@ function autocompleteListnerStart() {
         // map.setCenter(place.geometry.location);
         // map.setZoom(17);  // Why 17? Because it looks good.
     }
-    markerStart.setIcon( /** @type {google.maps.Icon} */ ({
+    markerStart.setIcon(/** @type {google.maps.Icon} */({
         url: place.icon,
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
-        //                anchor: new google.maps.Point(17, 34),
-        //                scaledSize: new google.maps.Size(35, 35)
+//                anchor: new google.maps.Point(17, 34),
+//                scaledSize: new google.maps.Size(35, 35)
     }));
     markerStart.setPosition(place.geometry.location);
     markerStart.setVisible(true);
@@ -53,7 +47,9 @@ function autocompleteListnerStart() {
     var address = '';
     if (place.address_components) {
         address = [
-            (place.address_components[0] && place.address_components[0].short_name || ''), (place.address_components[1] && place.address_components[1].short_name || ''), (place.address_components[2] && place.address_components[2].short_name || '')
+            (place.address_components[0] && place.address_components[0].short_name || ''),
+            (place.address_components[1] && place.address_components[1].short_name || ''),
+            (place.address_components[2] && place.address_components[2].short_name || '')
         ].join(' ');
     }
 
@@ -81,12 +77,12 @@ function autocompleteListnerEnd() {
         // map.setCenter(place.geometry.location);
         // map.setZoom(17);  // Why 17? Because it looks good.
     }
-    markerEnd.setIcon( /** @type {google.maps.Icon} */ ({
+    markerEnd.setIcon(/** @type {google.maps.Icon} */({
         url: place.icon,
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
-        //                anchor: new google.maps.Point(17, 34),
-        //                scaledSize: new google.maps.Size(35, 35)
+//                anchor: new google.maps.Point(17, 34),
+//                scaledSize: new google.maps.Size(35, 35)
     }));
     markerEnd.setPosition(place.geometry.location);
     markerEnd.setVisible(true);
@@ -94,7 +90,9 @@ function autocompleteListnerEnd() {
     var address = '';
     if (place.address_components) {
         address = [
-            (place.address_components[0] && place.address_components[0].short_name || ''), (place.address_components[1] && place.address_components[1].short_name || ''), (place.address_components[2] && place.address_components[2].short_name || '')
+            (place.address_components[0] && place.address_components[0].short_name || ''),
+            (place.address_components[1] && place.address_components[1].short_name || ''),
+            (place.address_components[2] && place.address_components[2].short_name || '')
         ].join(' ');
     }
 
@@ -106,19 +104,6 @@ function autocompleteListnerEnd() {
 }
 
 
-function getEstimatesForUserLocation() {
-    var url = 'https://api.uber.com/v1/estimates/price?start_latitude=37.625732&start_longitude=-122.377807&end_latitude=37.785114&end_longitude=-122.406677&server_token=rQNg72K512hx6HNGC6a6YR3b4ehRjgCrfjtA2XPx';
-    var data = "hello";
-    $.get(url, {}, function(response) {
-        data = response;
-        //                alert('Query is done.');
-        console.log(data);
-
-    }).error(function() {
-        alert("Sorry could not proceed");
-    })
-    return data;
-}
 
 
 function initMap() {
@@ -128,15 +113,13 @@ function initMap() {
     // Get a map.
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 7,
-        center: {
-            lat: 41.85,
-            lng: -87.65
-        },
+        center: {lat: 41.85, lng: -87.65},
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     directionsDisplay.setMap(map);
 
-    getEstimatesForUserLocation();
+//            getEstimatesForUserLocation(userLatitude, userLongitude, partyLatitude, partyLongitude);
+//            return;
 
     // On change handler for directions.
     var onChangeHandler = function() {
@@ -177,15 +160,69 @@ function initMap() {
 
 }
 
+var uber_average = 0;
+
+
+function getUberEstimate(startLatitude,startLongitude,endLatitude,endLongitude, callback)
+{
+    var uberServerToken = "rQNg72K512hx6HNGC6a6YR3b4ehRjgCrfjtA2XPx";
+    var myURL = "https://api.uber.com/v1/estimates/price";
+
+    $.ajax({
+        type: 'GET',
+        url: myURL,
+        header: {
+
+        },
+        data: {
+            server_token: uberServerToken,
+            start_latitude : startLatitude ,
+            start_longitude: startLongitude,
+            end_latitude: endLatitude,
+            end_longitude: endLongitude
+        },
+        async: false,
+        dataType: 'json',
+        crossDomain: true,
+        success: function( response , textStatus, xhr) {
+            console.log(response);
+            var average = (response.prices[0].low_estimate + response.prices[0].high_estimate)/2;
+//                    console.log(average);
+            callback(average);
+
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.log(errorThrown); }
+
+    });
+}
+
 function calculateCost(response) {
     steps = response.routes[0].legs[0].steps;
     // Instantiate an info window to hold step text.
     var stepDisplay = new google.maps.InfoWindow;
     showSteps(response, stepDisplay);
+
+    console.log( 'Public transport cost ' + response.routes[0].fare.value.toString());
+    var price = response.routes[0].fare.value;
+
     for (var i = 0; i < steps.length; i++) {
+        var step = steps[i];
+        if (step.travel_mode == "WALKING") {
+            if (step.duration.value >= 300) {
+                getUberEstimate(step.start_location.J, step.start_location.M,
+                        step.end_location.J, step.end_location.M, function(average) {
+                            uber_average = average;
+                        });
+                console.log(uber_average);
+                price += uber_average;
+            }
+        }
         console.log(steps[i].travel_mode);
     }
+    console.log('Final price ' + price.toString());
 
+    return price;
 }
 
 
@@ -195,7 +232,7 @@ function showSteps(directionResult, stepDisplay) {
     // when calculating new routes.
     var myRoute = directionResult.routes[0].legs[0];
     for (var i = 0; i < myRoute.steps.length; i++) {
-        var marker = new google.maps.Marker;
+        var marker =  new google.maps.Marker;
 
         google.maps.event.addListener(marker, 'click', function() {
             map.setZoom(22);
@@ -224,7 +261,10 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         travelMode: google.maps.TravelMode.TRANSIT
     }, function(response, status) {
         console.log(response);
-        calculateCost(response);
+        final_price = calculateCost(response);
+        var element = document.getElementById("result");
+        element.innerHTML = "The cheapest and fastest route costs $ " + final_price.toString();
+
         if (status === google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
         } else {
@@ -232,39 +272,3 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         }
     });
 }
-
-
-
-function getEstimatesForUserLocation(startLatitude,startLongitude,endLatitude,endLongitude)
-{
-    var uberServerToken = "rQNg72K512hx6HNGC6a6YR3b4ehRjgCrfjtA2XPx";
-    var myURL = "https://api.uber.com/v1/estimates/price";
-
-    $.ajax({
-      type: 'GET',
-      url: myURL,
-      data: { 
-      server_token: uberServerToken, 
-       start_latitude : startLatitude ,
-       start_longitude: startLongitude,
-       end_latitude: endLatitude,
-       end_longitude: endLongitude       
-      },
-      dataType: 'json',
-      crossDomain: true,
-      success: function( response , textStatus, xhr) {
-          console.log(response.prices[0].low_estimate);
-          console.log(response.prices[0].high_estimate);
-          var average = (response.prices[0].low_estimate + response.prices[0].high_estimate)/2;
-           
-          console.log(average);
-          return average; 
-          
-      },
-      error: function (xhr, textStatus, errorThrown) {
-            console.log(errorThrown); }
-
-    });
-
-}
-
