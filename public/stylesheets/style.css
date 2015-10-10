@@ -6,3 +6,8 @@ body {
 a {
   color: #00B7FF;
 }
+
+#map {
+  width: 1260px;
+  height: 540px;
+}
