@@ -227,6 +227,8 @@ function calculateCost(response) {
 
     for (var i = 0; i < steps.length; i++) {
         var step = steps[i];
+        var instructions = step.instructions;
+        var travel_mode = "";
         if (step.travel_mode == "WALKING") {
             if (step.duration.value >= 200) {
                 getUberEstimate(step.start_location.J, step.start_location.M,
@@ -235,21 +237,40 @@ function calculateCost(response) {
                         uber_time = duration;
                         //console.log(uber_time);
                     });
-                //console.log(uber_average);
                 price_M += uber_average;
-                //console.log('UBER ' + uber_time.toString());
-                //console.log(step.duration.value);
                 uber_time_save += step.duration.value - uber_time;
-                //console.log(uber_time_save);
+                travel_mode = "UBER";
+
             }
             else {
-                //console.log('PUBLIC ' + step.duration.value.toString());
+                travel_mode = "WALKING";
             }
         }
         else {
-            //console.log('PUBLIC ' + step.duration.value.toString());
+            travel_mode = "TRANSIT";
+
         }
-        //console.log(steps[i].travel_mode);
+
+        var table = document.getElementById("instruction-table");
+        var row = table.insertRow(-1);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        if(travel_mode==="WALKING"){
+            row.className = "success";
+        }
+        if(travel_mode==="UBER"){
+            row.className = "info";
+        }
+        if(travel_mode==="TRANSIT"){
+            row.className ="warning";
+
+        }
+        cell1.innerHTML = travel_mode;
+        cell2.innerHTML = instructions;
+
+
+
     }
     var total_time_M = total_time_P - uber_time_save;
     console.log('Total time M ' + getTimeString(total_time_M));
@@ -279,10 +300,10 @@ function getTimeString(time) {
     ret = "";
 
     if (hrs > 0)
-        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+        ret += "" + hrs + " hr, " + (mins < 10 ? "0" : "");
 
-    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
-    ret += "" + secs;
+    ret += "" + mins + " min, " + (secs < 10 ? "0" : "");
+    ret += "" + secs+" sec (approx.)";
     return ret;
 }
 
