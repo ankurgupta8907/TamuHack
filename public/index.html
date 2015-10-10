@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <LINK href="/stylesheets/style.css" rel="stylesheet" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgRmvEDZPv0vPqsVv1FyKnjVc4cZ6xvAo&signed_in=true&libraries=places&callback=initMap"
+        async defer></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="javascripts/maps.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-sm-12 jumbotron">
+                <h1>Cheapest Route Finder</h1>
+                <p>A travel route finder which combines public transport and cab services to computes the cheapest fares for your journey.</p>
+                </div>
+            </div>
 
-
-<head>
-    <LINK href="/stylesheets/style.css" rel="stylesheet" type="text/css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgRmvEDZPv0vPqsVv1FyKnjVc4cZ6xvAo&signed_in=true&libraries=places&callback=initMap"
-            async defer></script>
-    <script type="text/javascript" src="javascripts/maps.js">
-    
-    </script>
-</head>
-
-<body>
-<div id="map"></div>
-<div>
-    <strong>Start: </strong>
-    <input id="start" class="controls" type="text" placeholder="Enter the start location" value="450 Oak Avenue, Menlo Park, CA, United States" size="50"/>
-    <strong>End: </strong>
-    <input id="end" class="controls" type="text" placeholder="Enter the end location" value="1 Howard Street, San Francisco, CA, United States" size="50"/>
-    <input id="calculate_directions" type="submit" value="Submit"> <br>
-    <h3 id="result"></h3>
-    </select>
-</div>
-</body>
-</html>
+            <div class="row">
+                <div class="col-sm-3">.col-sm-4 sfsfs</div>
+                <div id="map" class="col-sm-9"></div>
+                </div> <!-- div row ends-->
+                
+                <div class="row">
+                    <div class="col-sm-3">.col-sm-4</div>
+                    <div class="col-sm-9">
+                        <br/>
+                        <b>Start: </b>
+                        <input id="start" class="controls" type="text" placeholder="Enter the start location" value="450 Oak Avenue, Menlo Park, CA, United States" size="50"/>
+                        <b>End: </b>
+                        <input id="end" class="controls" type="text" placeholder="Enter the end location" value="1 Howard Street, San Francisco, CA, United States" size="50"/>
+                        <input id="calculate_directions" type="submit" value="Submit"> <br>
+                        <h3 id="result"></h3>
+                    </select>
+                </div>
+                </div> <!-- div row ends-->
+                
+                </div> <!-- div container ends-->
+            </body>
+        </html>
