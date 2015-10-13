@@ -12,14 +12,5 @@ a {
 }
 
 .jumbotron {
-    padding: 0.1em 0.2em;
-    h1 {
-        font-size: 1em;
-    }
-    p {
-        font-size: 1.2em;
-        .btn {
-            padding: 0.1em;
-        }
-    }
+    max-height: 150;
 }
